@@ -27,13 +27,13 @@ useEffect(() => {
 }, []);
 
 useEffect(() => {
-  fetch("http://localhost:5000/order-status")
+  fetch("https://namaste-cafe-backend.onrender.com/order-status")
     .then(res => res.json())
     .then(data => setOrderEnabled(data.enabled));
 }, []);
 
 const toggleOrders = async () => {
-  const res = await fetch("http://localhost:5000/toggle-orders", {
+  const res = await fetch("https://namaste-cafe-backend.onrender.com/toggle-orders", {
     method: "POST",
   });
 
@@ -43,7 +43,7 @@ const toggleOrders = async () => {
 
   // ✅ FETCH ORDERS
  useEffect(() => {
-  fetch("http://localhost:5000/orders")
+  fetch("https://namaste-cafe-backend.onrender.com/orders")
     .then(res => res.json())
     .then(data => {
       setOrders(
@@ -55,7 +55,7 @@ const toggleOrders = async () => {
 
   // 🔥 SOCKET (REALTIME + SOUND CONTROL)
   useEffect(() => {
-  const socket = io("http://localhost:5000");
+  const socket = io("https://namaste-cafe-backend.onrender.com");
 
   // 🆕 NEW ORDER
   socket.on("newOrder", (newOrder) => {
@@ -109,7 +109,7 @@ const toggleOrders = async () => {
     const order = orders[index];
 
     try {
-      const res = await fetch(`http://localhost:5000/orders/${order.id}`, {
+      const res = await fetch(`https://namaste-cafe-backend.onrender.com/orders/${order.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"
@@ -265,7 +265,7 @@ const toggleOrders = async () => {
     onClick={() => {
       if (order.deliveryToken) {
         navigator.clipboard.writeText(
-          `http://localhost:3000/deliver/${order.deliveryToken}`
+          `https://namaste-cafe-frontend.vercel.app/deliver/${order.deliveryToken}`
         );
         alert("Link copied!");
       }
