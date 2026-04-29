@@ -98,7 +98,7 @@ useEffect(() => {
 }, []);
 
 useEffect(() => {
-  fetch("http://localhost:5000/order-status")
+  fetch("https://namaste-cafe-backend.onrender.com/order-status")
     .then(res => res.json())
     .then(data => setOrderEnabled(data.enabled));
 }, []);
@@ -158,7 +158,7 @@ const total = totalBeforeDiscount - discountAmount + codFee;
     const cafeLng = 86.9842;
 
     const res = await fetch(
-      `http://localhost:5000/route?origin=${lat},${lng}&destination=${cafeLat},${cafeLng}`
+      `https://namaste-cafe-backend.onrender.com/route?origin=${lat},${lng}&destination=${cafeLat},${cafeLng}`
     );
 
     return await res.json();
@@ -257,7 +257,7 @@ const sendOrderToServer = async (paymentStatus) => {
   };
 
   try {
-    const res = await fetch("http://localhost:5000/orders", {
+    const res = await fetch("https://namaste-cafe-backend.onrender.com/orders", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
