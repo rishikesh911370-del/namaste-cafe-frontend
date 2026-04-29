@@ -16,7 +16,7 @@ export default function Admin() {
 
   // ✅ FETCH ORDERS FROM BACKEND
   const fetchOrders = () => {
-    fetch("http://localhost:5000/orders")
+    fetch("https://namaste-cafe-backend.onrender.com/orders")
       .then(res => res.json())
       .then(data => {
         console.log("✅ Orders from backend:", data); // debug
@@ -29,7 +29,7 @@ export default function Admin() {
   useEffect(() => {
     fetchOrders(); // load existing
 
-    const socket = io("http://localhost:5000");
+    const socket = io("https://namaste-cafe-backend.onrender.com");
 
     socket.on("newOrder", (order) => {
       console.log("🔥 New order received:", order);
