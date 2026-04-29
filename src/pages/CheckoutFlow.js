@@ -176,21 +176,29 @@ const total = totalBeforeDiscount - discountAmount + codFee;
       setCoords({ lat, lng });
 
       try {
-        const route = await getRouteDistance(lat, lng);
+       const route = await getRouteDistance(lat, lng);
 
-        setDistance(route.distance);
-        const numericDistance = parseFloat(route.distance);
+setDistance(route.distance);
 
-        setTimeout(() => {
-          setLoading(false);
+let numericDistance = 0;
 
-          if (numericDistance <= 4) {
-            setStep("success");
-          } else {
-            alert("Sorry, currently we are not serving your area ❌");
-            setStep(null);
-          }
-        }, 1200);
+if (route.distance.includes("km")) {
+  numericDistance = parseFloat(route.distance);
+} else if (route.distance.includes("m")) {
+  numericDistance = parseFloat(route.distance) / 1000;
+}
+
+setTimeout(() => {
+  setLoading(false);
+
+  if (numericDistance <= 4) {
+    setStep("success");
+  } else {
+    alert("Sorry, currently we are not serving your area ❌");
+    setStep(null);
+  }
+}, 1200);
+
 
       } catch (err) {
         alert("Error fetching route ❌");
