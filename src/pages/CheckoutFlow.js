@@ -44,7 +44,7 @@ const isCafeOpen = () => {
   const now = new Date();
   const hours = now.getHours(); // 0–23 format
 
-  return hours >= 11 && hours < 22; // 11 AM to 10 PM
+  return hours >= 0 && hours < 22; // 11 AM to 10 PM
 };
 const isOpen = isCafeOpen();
 
