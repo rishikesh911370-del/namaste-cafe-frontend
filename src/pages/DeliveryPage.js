@@ -8,7 +8,7 @@ const DeliveryPage = () => {
   const [updating, setUpdating] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:5000/orders")
+    fetch("https://namaste-cafe-backend.onrender.com/orders")
       .then(res => res.json())
       .then(data => {
         const found = data.find(o => o.deliveryToken === token);
@@ -23,7 +23,7 @@ const DeliveryPage = () => {
 
     setUpdating(true);
 
-    await fetch(`http://localhost:5000/orders/${order.id}`, {
+    await fetch(`https://namaste-cafe-backend.onrender.com/orders/${order.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ riderStatus: status })
