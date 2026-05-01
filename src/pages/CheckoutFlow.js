@@ -626,7 +626,7 @@ onClick={() => setStep("upiQR")}
         style={{ marginTop: "20px" }}
         onClick={() => {
           setStep(null);
-          window.location.href = "/";
+          window.location.reload();
         }}
       >
         Back to Menu
