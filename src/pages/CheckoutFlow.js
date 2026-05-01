@@ -131,13 +131,16 @@ const totalBeforeDiscount = subtotal + gst;
 // discount logic
 let discountPercent = 0;
 
-if (totalBeforeDiscount >= 1299) {
+if (totalBeforeDiscount >= 1599) {
+  discountPercent = 15;
+} else if (totalBeforeDiscount >= 1299) {
   discountPercent = 12;
 } else if (totalBeforeDiscount >= 799) {
-  discountPercent = 8;
+  discountPercent = 9;
 } else if (totalBeforeDiscount >= 399) {
-  discountPercent = 5;
+  discountPercent = 6;
 }
+
 
 const discountAmount = Math.round(
   (totalBeforeDiscount * discountPercent) / 100
