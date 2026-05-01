@@ -36,6 +36,15 @@ const CheckoutFlow = ({ cart, setOrders, setCart }) => {
 };
 console.log("setOrders:", setOrders);
 console.log("setCart:", setCart);
+
+  
+const isCafeOpen = () => {
+  const now = new Date();
+  const hours = now.getHours(); // 0–23 format
+
+  return hours >= 10 && hours < 22; // 10 AM to 10 PM
+};
+const isOpen = isCafeOpen();
   
   const [step, setStep] = useState(null);
   const [distance, setDistance] = useState("");
