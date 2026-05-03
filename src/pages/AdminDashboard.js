@@ -6,6 +6,20 @@ const AdminDashboard = () => {
   const [orders, setOrders] = useState([]);
   const audioRef = useRef(null);
   const navigate = useNavigate();
+  const [stats, setStats] = useState({
+  total: 0,
+  daily: 0,
+  weekly: 0,
+  monthly: 0,
+  yearly: 0
+});
+
+useEffect(() => {
+  fetch("https://namaste-cafe-backend.onrender.com/visit-stats")
+    .then(res => res.json())
+    .then(data => setStats(data));
+}, []);
+
 
   // 🕒 DELIVERY TIME (GLOBAL)
   const getDeliveryTime = () => {
@@ -174,6 +188,22 @@ const toggleOrders = async () => {
   return (
     <div className="dashboard">
       <h1>📦 Orders Dashboard</h1>
+
+    <div style={{
+  display: "grid",
+  gridTemplateColumns: "repeat(5, 1fr)",
+  gap: "10px",
+  marginBottom: "20px"
+}}>
+
+  <div className="stat-card">👁 Total: {stats.total}</div>
+  <div className="stat-card">📅 Today: {stats.daily}</div>
+  <div className="stat-card">📆 Week: {stats.weekly}</div>
+  <div className="stat-card">🗓 Month: {stats.monthly}</div>
+  <div className="stat-card">📊 Year: {stats.yearly}</div>
+
+</div>
+
 
 <button
   onClick={toggleOrders}
