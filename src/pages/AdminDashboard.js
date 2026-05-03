@@ -118,25 +118,25 @@ const AdminDashboard = () => {
     <div className="dashboard">
       <h1>📦 Orders Dashboard</h1>
 
-      {/* 🔝 TOP BAR */}
-      <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
-        <button onClick={() => setShowStats(true)}>
-          Website Visits 📊
-        </button>
+<div className="top-bar">
+  <button className="btn btn-blue" onClick={() => setShowStats(true)}>
+    📊 Website Visits
+  </button>
 
-        <button onClick={toggleOrders}>
-          {orderEnabled ? "Disable Orders ❌" : "Enable Orders ✅"}
-        </button>
+  <button className="btn btn-red" onClick={toggleOrders}>
+    {orderEnabled ? "Disable Orders ❌" : "Enable Orders ✅"}
+  </button>
 
-        <button
-          onClick={() => {
-            localStorage.removeItem("adminAuth");
-            window.location.href = "/admin";
-          }}
-        >
-          Logout
-        </button>
-      </div>
+  <button
+    className="btn btn-gray"
+    onClick={() => {
+      localStorage.removeItem("adminAuth");
+      window.location.href = "/admin";
+    }}
+  >
+    Logout
+  </button>
+</div>
 
       {/* 📦 ORDERS */}
       {orders.length === 0 ? (
