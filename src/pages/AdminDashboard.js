@@ -261,8 +261,8 @@ const toggleOrders = async () => {
                 <div key={i}>
                   {item.name} × {item.qty}
                 </div>
-              ))}
-            </div>
+                  ))}
+</div>
 
             <p><strong>Total:</strong> ₹{order.total}</p>
             <p><strong>Status:</strong> {order.status}</p>
@@ -407,7 +407,8 @@ const toggleOrders = async () => {
         <div>👁 Total: {stats.total}</div>
         <div>📅 Today: {stats.daily}</div>
         <div>📆 Week: {stats.weekly}</div>
-        <div>🗓 Month: {stats.monthly}</div>
+        <div>🗓 Month: {statwhre is this ;ocated
+       s.monthly}</div>
         <div>📊 Year: {stats.yearly}</div>
       </div>
 
