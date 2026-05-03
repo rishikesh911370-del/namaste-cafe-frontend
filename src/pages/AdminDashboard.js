@@ -404,13 +404,12 @@ const toggleOrders = async () => {
       <h2>📊 Website Analytics</h2>
 
       <div className="stats-grid">
-        <div>👁 Total: {stats.total}</div>
-        <div>📅 Today: {stats.daily}</div>
-        <div>📆 Week: {stats.weekly}</div>
-        <div>🗓 Month: {statwhre is this ;ocated
-       s.monthly}</div>
-        <div>📊 Year: {stats.yearly}</div>
-      </div>
+  <div>👁 Total: {stats.total}</div>
+  <div>📅 Today: {stats.daily}</div>
+  <div>📆 Week: {stats.weekly}</div>
+  <div>🗓 Month: {stats.monthly}</div>
+  <div>📊 Year: {stats.yearly}</div>
+</div>
 
     </div>
   </div>
