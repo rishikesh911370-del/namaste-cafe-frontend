@@ -13,7 +13,8 @@ const AdminDashboard = () => {
   monthly: 0,
   yearly: 0
 });
-
+const [showStats, setShowStats] = useState(false);
+  
 useEffect(() => {
   fetch("https://namaste-cafe-backend.onrender.com/visit-stats")
     .then(res => res.json())
@@ -202,7 +203,49 @@ const toggleOrders = async () => {
   <div className="stat-card">🗓 Month: {stats.monthly}</div>
   <div className="stat-card">📊 Year: {stats.yearly}</div>
 
+  {showStats && (
+  <div className="modal-overlay">
+    <div className="modal-box">
+
+      <span 
+        className="close"
+        onClick={() => setShowStats(false)}
+      >
+        ✕
+      </span>
+
+      <h2>📊 Website Analytics</h2>
+
+      <div className="stats-grid">
+        <div>👁 Total: {stats.total}</div>
+        <div>📅 Today: {stats.daily}</div>
+        <div>📆 Week: {stats.weekly}</div>
+        <div>🗓 Month: {stats.monthly}</div>
+        <div>📊 Year: {stats.yearly}</div>
+      </div>
+
+    </div>
+  </div>
+)}
+
 </div>
+
+  <button
+  onClick={() => setShowStats(true)}
+  style={{
+    position: "absolute",
+    top: "20px",
+    right: "220px",
+    background: "#3498db",
+    color: "#fff",
+    border: "none",
+    padding: "8px 14px",
+    borderRadius: "6px",
+    cursor: "pointer"
+  }}
+>
+  Website Visits 📊
+</button>
 
 
 <button
