@@ -4045,3 +4045,52 @@ body {
   cursor: pointer;
   font-size: 18px;
 }
+.top-bar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* Base Button */
+.btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Blue Button */
+.btn-blue {
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  color: #fff;
+}
+
+.btn-blue:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 242, 254, 0.3);
+}
+
+/* Red Button */
+.btn-red {
+  background: linear-gradient(135deg, #ff4d4f, #ff7875);
+  color: #fff;
+}
+
+.btn-red:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 77, 79, 0.3);
+}
+
+/* Gray Button */
+.btn-gray {
+  background: #2c2c2c;
+  color: #fff;
+}
+
+.btn-gray:hover {
+  background: #444;
+}
