@@ -14,7 +14,7 @@ const AdminDashboard = () => {
   yearly: 0
 });
 const [showStats, setShowStats] = useState(false);
-  
+
 useEffect(() => {
   fetch("https://namaste-cafe-backend.onrender.com/visit-stats")
     .then(res => res.json())
@@ -392,30 +392,30 @@ const toggleOrders = async () => {
             </div>
           </div>
         ))
-           )}
+              )}
       
-      {/* ✅ PASTE HERE */}
-      {showStats && (
-        <div className="modal-overlay">
-          <div className="modal-box">
+      {/* ✅ MODAL */}
+     {showStats && (
+  <div className="modal-overlay">
+    <div className="modal-box">
 
-            <span onClick={() => setShowStats(false)}>✕</span>
+      <span onClick={() => setShowStats(false)}>✕</span>
 
-            <h2>📊 Website Analytics</h2>
+      <h2>📊 Website Analytics</h2>
 
-            <div className="stats-grid">
-              <div>👁 Total: {stats.total}</div>
-              <div>📅 Today: {stats.daily}</div>
-              <div>📆 Week: {stats.weekly}</div>
-              <div>🗓 Month: {stats.monthly}</div>
-              <div>📊 Year: {stats.yearly}</div>
-            </div>
+      <div className="stats-grid">
+        <div>👁 Total: {stats.total}</div>
+        <div>📅 Today: {stats.daily}</div>
+        <div>📆 Week: {stats.weekly}</div>
+        <div>🗓 Month: {stats.monthly}</div>
+        <div>📊 Year: {stats.yearly}</div>
+      </div>
 
-          </div>
-        </div>
-      )}
-    </div>   {/* ← main dashboard div */}
+    </div>
+  </div>
+)}
+
+    </div>  {/* ✅ CLOSE MAIN DASHBOARD */}
   );
 };
-
 export default AdminDashboard;
