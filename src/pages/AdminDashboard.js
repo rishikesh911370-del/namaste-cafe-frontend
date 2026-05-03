@@ -414,8 +414,6 @@ const toggleOrders = async () => {
     </div>
   </div>
 )}
-
-</div>   {/* main dashboard close */}
 );
 };
 
