@@ -11,7 +11,7 @@ const AdminDashboard = () => {
   daily: 0,
   weekly: 0,
   monthly: 0,
-  yearly: 0
+  yearly: 0,
 });
 const [showStats, setShowStats] = useState(false);
 
