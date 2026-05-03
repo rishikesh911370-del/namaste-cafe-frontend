@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import menuItems from "../data/menuItems";
-import heroBg from "../assets/hero.jpg";
 import { useNavigate } from "react-router-dom";
 import fssaiLogo from "../assets/fssai.png";
-
 
 const Menu = ({ cart, addToCart, decreaseQty, openCart }) => {
 const navigate = useNavigate();
@@ -18,6 +16,16 @@ const location = useLocation();
       }
     }
   }, [location]);
+
+  useEffect(() => {
+  if (!localStorage.getItem("visited")) {
+    fetch("https://namaste-cafe-backend.onrender.com/track-visit", {
+      method: "POST"
+    });
+
+    localStorage.setItem("visited", "true");
+  }
+}, []);
 
 const scrollToMenu = () => {
   const section = document.getElementById("menu-section");
