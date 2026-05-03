@@ -190,100 +190,58 @@ const toggleOrders = async () => {
     <div className="dashboard">
       <h1>📦 Orders Dashboard</h1>
 
-    <div style={{
-  display: "grid",
-  gridTemplateColumns: "repeat(5, 1fr)",
+  <div style={{
+  display: "flex",
+  justifyContent: "flex-end",
   gap: "10px",
   marginBottom: "20px"
 }}>
 
-  <div className="stat-card">👁 Total: {stats.total}</div>
-  <div className="stat-card">📅 Today: {stats.daily}</div>
-  <div className="stat-card">📆 Week: {stats.weekly}</div>
-  <div className="stat-card">🗓 Month: {stats.monthly}</div>
-  <div className="stat-card">📊 Year: {stats.yearly}</div>
-
-  {showStats && (
-  <div className="modal-overlay">
-    <div className="modal-box">
-
-      <span 
-        className="close"
-        onClick={() => setShowStats(false)}
-      >
-        ✕
-      </span>
-
-      <h2>📊 Website Analytics</h2>
-
-      <div className="stats-grid">
-        <div>👁 Total: {stats.total}</div>
-        <div>📅 Today: {stats.daily}</div>
-        <div>📆 Week: {stats.weekly}</div>
-        <div>🗓 Month: {stats.monthly}</div>
-        <div>📊 Year: {stats.yearly}</div>
-      </div>
-
-    </div>
-  </div>
-)}
-
-</div>
+  <button
+    onClick={() => setShowStats(true)}
+    style={{
+      background: "#3498db",
+      color: "#fff",
+      border: "none",
+      padding: "8px 14px",
+      borderRadius: "6px",
+      cursor: "pointer"
+    }}
+  >
+    Website Visits 📊
+  </button>
 
   <button
-  onClick={() => setShowStats(true)}
-  style={{
-    position: "absolute",
-    top: "20px",
-    right: "220px",
-    background: "#3498db",
-    color: "#fff",
-    border: "none",
-    padding: "8px 14px",
-    borderRadius: "6px",
-    cursor: "pointer"
-  }}
->
-  Website Visits 📊
-</button>
-
-
-<button
-  onClick={toggleOrders}
-  style={{
-    position: "absolute",
-    top: "20px",
-    right: "120px",
-    background: orderEnabled ? "#ff4d4f" : "#2ecc71",
-    color: "#fff",
-    border: "none",
-    padding: "8px 14px",
-    borderRadius: "6px",
-    cursor: "pointer"
-  }}
->
-  {orderEnabled ? "Disable Orders ❌" : "Enable Orders ✅"}
-</button>
-
- <button
-  style={{
-    position: "absolute",
-    top: "20px",
-    right: "20px",
-    background: "#ff4d4f",
-    color: "#fff",
-    border: "none",
-    padding: "8px 14px",
-    borderRadius: "6px",
-    cursor: "pointer"
-  }}
-  onClick={() => {
-    localStorage.removeItem("adminAuth");
-    window.location.href = "/admin";
-  }}
->
-  Logout
-</button>
+    onClick={toggleOrders}
+    style={{
+      background: orderEnabled ? "#ff4d4f" : "#2ecc71",
+      color: "#fff",
+      border: "none",
+      padding: "8px 14px",
+      borderRadius: "6px",
+      cursor: "pointer"
+    }}
+  >
+    {orderEnabled ? "Disable Orders ❌" : "Enable Orders ✅"}
+  </button>
+    
+    <button
+    onClick={() => {
+      localStorage.removeItem("adminAuth");
+      window.location.href = "/admin";
+    }}
+    style={{
+      background: "#ff4d4f",
+      color: "#fff",
+      border: "none",
+      padding: "8px 14px",
+      borderRadius: "6px",
+      cursor: "pointer"
+    }}
+  >
+    Logout
+  </button>
+</div>
 
       {orders.length === 0 ? (
         <p>No orders yet</p>
@@ -434,8 +392,29 @@ const toggleOrders = async () => {
             </div>
           </div>
         ))
+           )}
+      
+      {/* ✅ PASTE HERE */}
+      {showStats && (
+        <div className="modal-overlay">
+          <div className="modal-box">
+
+            <span onClick={() => setShowStats(false)}>✕</span>
+
+            <h2>📊 Website Analytics</h2>
+
+            <div className="stats-grid">
+              <div>👁 Total: {stats.total}</div>
+              <div>📅 Today: {stats.daily}</div>
+              <div>📆 Week: {stats.weekly}</div>
+              <div>🗓 Month: {stats.monthly}</div>
+              <div>📊 Year: {stats.yearly}</div>
+            </div>
+
+          </div>
+        </div>
       )}
-    </div>
+    </div>   {/* ← main dashboard div */}
   );
 };
 
