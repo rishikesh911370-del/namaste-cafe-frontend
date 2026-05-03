@@ -394,8 +394,7 @@ const toggleOrders = async () => {
         ))
               )}
       
-      {/* ✅ MODAL */}
-     {showStats && (
+      {showStats && (
   <div className="modal-overlay">
     <div className="modal-box">
 
@@ -414,7 +413,9 @@ const toggleOrders = async () => {
     </div>
   </div>
 )}
+
+</div>   {/* ✅ THIS WAS MISSING */}
+
 );
 };
-
 export default AdminDashboard;
