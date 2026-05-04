@@ -4113,3 +4113,17 @@ body {
   position: relative;
   box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 }
+.delivery-card h2 {
+  color: #3b2f2f;   /* cafe brown tone */
+}
+
+.delivery-sub {
+  color: #5a4a42;
+}
+
+.delivery-note {
+  color: #7a6a60;
+}
+.delivery-card {
+  border: 1px solid #e6ded3;
+}
