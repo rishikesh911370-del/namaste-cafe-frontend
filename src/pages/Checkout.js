@@ -102,6 +102,17 @@ const Checkout = ({ cart }) => {
         {showModal && (
           <div className="modal-overlay">
             <div className="delivery-modal">
+          
+           {/* CLOSE */}
+      <button
+        className="close-btn"
+        onClick={() => {
+          setShowModal(false);
+          setStatus(null);
+        }}
+      >
+        ✕
+      </button>
 
               {/* HEADER */}
               <div className="modal-header">
