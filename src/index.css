@@ -1421,7 +1421,9 @@ html {
 
   box-shadow: 0 6px 20px rgba(255, 100, 0, 0.3);
 }
-
+.location-btn {
+  color: #ffffff !important;
+}
 /* ANIMATION */
 @keyframes slideLeft {
   from {
@@ -4037,8 +4039,9 @@ body {
   box-shadow: 0 15px 40px rgba(0,0,0,0.2);
   border: 1px solid #e6ded3;
 }
-.modal-box * {
-  color: #2c2c2c !important;
+.modal-box h2,
+.modal-box p {
+  color: #2c2c2c;
 }
 
 .stats-grid {
