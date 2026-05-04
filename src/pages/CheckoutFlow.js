@@ -40,9 +40,9 @@ console.log("setCart:", setCart);
   
 const isCafeOpen = () => {
   const now = new Date();
-  const hours = now.getHours(); // 0–23 format
+  const hours = now.getHours(); // 0–24 format
 
-  return hours >= 7 && hours < 22; // 7 AM to 10 PM
+  return hours >= 11 && hours < 23:30; // 11 AM to 11:30 PM
 };
 const isOpen = isCafeOpen();
   
@@ -350,7 +350,7 @@ const handleUPIPaid = async () => {
   }}>
     ⛔ We're offline, but not forever ! 
     <br />
-    🕒 Find us "7:00 AM – 10:00 PM"
+    🕒 Find us "11:00 AM – 10:00 PM"
   </p>
 )}
 
