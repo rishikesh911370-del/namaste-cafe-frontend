@@ -11,7 +11,9 @@ const CheckoutFlow = ({ cart, setOrders, setCart }) => {
     items: cart,
     status: "Pending",
   };
-
+useEffect(() => {
+  setOrderEnabled(true);
+}, []);
   // ✅ SAFE CHECK
   if (typeof setOrders === "function") {
     setOrders(prev => [...prev, order]);
@@ -91,14 +93,14 @@ useEffect(() => {
     .then(res => res.json())
     .then(data => setOrderEnabled(data.enabled));
 }, []);
+  
 const isCafeOpen = () => {
   const now = new Date();
   const hours = now.getHours(); // 0–23 format
 
-  return hours >= 0 && hours < 22; // 11 AM to 10 PM
+  return hours >= 11 && hours < 22; // 11 AM to 10 PM
 };
 const isOpen = isCafeOpen();
-
 
   const [paymentMethod, setPaymentMethod] = useState("");
 
@@ -128,17 +130,13 @@ const totalBeforeDiscount = subtotal + gst;
 // discount logic
 let discountPercent = 0;
 
-if (totalBeforeDiscount >= 1599) {
+ if (totalBeforeDiscount >= 1299) {
   discountPercent = 15;
-} else if (totalBeforeDiscount >= 1299) {
-  discountPercent = 12;
 } else if (totalBeforeDiscount >= 799) {
-  discountPercent = 9;
+  discountPercent = 10;
 } else if (totalBeforeDiscount >= 399) {
   discountPercent = 6;
 }
-
-
 const discountAmount = Math.round(
   (totalBeforeDiscount * discountPercent) / 100
 );
@@ -148,7 +146,6 @@ const codFee = paymentMethod === "cod" ? COD_CHARGE : 0;
 
 // FINAL TOTAL
 const total = totalBeforeDiscount - discountAmount + codFee;
-
 
   // ===== GOOGLE API =====
   const getRouteDistance = async (lat, lng) => {
