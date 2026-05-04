@@ -274,12 +274,22 @@ const sendOrderToServer = async (paymentStatus) => {
       body: JSON.stringify(orderData)
     });
 
+    console.log("Response:", res);
+
+const data = await res.json();
+
+console.log("Data:", data);
+
+const savedOrder = data;
     if (!res.ok) throw new Error("Server error");
 
-    const savedOrder = await res.json();
-
     // ✅ WhatsApp message WITH DISCOUNT
-    const message = buildMessage(paymentMethod, savedOrder.id);
+    const orderId =
+  savedOrder?.id ||
+  savedOrder?._id ||
+  "NC" + Date.now();
+
+const message = buildMessage(paymentMethod, orderId);
 
     window.open(`https://wa.me/918002733701?text=${encodeURIComponent(message)}`);
     setStep("successOrder");
@@ -304,9 +314,6 @@ const handleCOD = async () => {
   setPaymentMethod("cod");
 
   await sendOrderToServer("Pending");
-
-  const message = buildMessage("COD");
-  window.open(`https://wa.me/918002733701?text=${encodeURIComponent(message)}`);
 };
 
 
@@ -315,9 +322,6 @@ const handleUPIPaid = async () => {
   setPaymentMethod("upi"); // ✅ ADD THIS
 
   await sendOrderToServer("Paid");
-
-  const message = buildMessage("UPI Paid");
-  window.open(`https://wa.me/918002733701?text=${encodeURIComponent(message)}`);
 };
 
   
@@ -440,7 +444,6 @@ const handleUPIPaid = async () => {
   </div>
 )}
 
-
       {/* ===== FORM ===== */}
       {step === "form" && (
         <div className="modal">
@@ -476,8 +479,7 @@ const handleUPIPaid = async () => {
     Phone no. must be 10 digits
   </p>
 )}
-
-
+  
             <textarea
               placeholder="Full Address"
               value={form.address}
