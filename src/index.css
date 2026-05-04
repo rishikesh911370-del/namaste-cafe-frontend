@@ -1406,20 +1406,21 @@ html {
 
 /* BUTTON */
 .location-btn {
-  width: 100%;
-  padding: 14px;
-  margin-top: 20px;
+  background: linear-gradient(135deg, #ff7a18, #ff4d00); /* keep your orange vibe */
+  color: #ffffff;  /* ✅ FIX: force white text */
 
-  border-radius: 12px;
   border: none;
+  padding: 14px 20px;
+  border-radius: 12px;
 
-  background: #3e2723;
-  color: white;
+  font-size: 16px;
+  font-weight: 600;
 
-  font-weight: bold;
   cursor: pointer;
-}
+  width: 100%;
 
+  box-shadow: 0 6px 20px rgba(255, 100, 0, 0.3);
+}
 /* ANIMATION */
 @keyframes slideLeft {
   from {
