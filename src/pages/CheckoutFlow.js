@@ -346,7 +346,7 @@ const handleUPIPaid = async () => {
   }}>
     ⛔ We're offline, but not forever ! 
     <br />
-    🕒 Find us "11:00 AM – 10:00 PM"
+    🕒 Find us "7:00 AM – 10:00 PM"
   </p>
 )}
 
