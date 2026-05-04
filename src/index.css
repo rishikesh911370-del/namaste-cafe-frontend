@@ -4022,13 +4022,21 @@ body {
 }
 
 .modal-box {
-  background: #1f2a3a;
+  background: #f5efe6;   /* ✅ beige like menu */
+  color: #2c2c2c;        /* readable dark text */
+
   padding: 25px;
-  border-radius: 12px;
+  border-radius: 16px;
   width: 400px;
-  color: white;
+
   text-align: center;
   position: relative;
+
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+  border: 1px solid #e6ded3;
+}
+.modal-box * {
+  color: #2c2c2c !important;
 }
 
 .stats-grid {
@@ -4104,18 +4112,4 @@ body {
   text-align: center;
   position: relative;
   box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-}
-.delivery-card h2 {
-  color: #3b2f2f;   /* cafe brown tone */
-}
-
-.delivery-sub {
-  color: #5a4a42;
-}
-
-.delivery-note {
-  color: #7a6a60;
-}
-.delivery-card {
-  border: 1px solid #e6ded3;
 }
