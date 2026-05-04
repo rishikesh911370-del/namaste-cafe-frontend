@@ -4094,3 +4094,35 @@ body {
 .btn-gray:hover {
   background: #444;
 }
+.primary-btn {
+  background: linear-gradient(135deg, #ff7a18, #ff4d00);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.primary-btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 20px rgba(255, 100, 0, 0.3);
+}
+.delivery-sub {
+  color: #cbd5e1;
+}
+
+.delivery-note {
+  color: #94a3b8;
+}
+.delivery-icon {
+  font-size: 42px;
+  margin-bottom: 10px;
+  text-shadow: 0 0 10px rgba(255, 120, 50, 0.5);
+}
+.modal {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+}
