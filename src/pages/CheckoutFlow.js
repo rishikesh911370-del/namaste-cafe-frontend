@@ -91,7 +91,13 @@ useEffect(() => {
     .then(res => res.json())
     .then(data => setOrderEnabled(data.enabled));
 }, []);
+const isCafeOpen = () => {
+  const now = new Date();
+  const hours = now.getHours(); // 0–23 format
 
+  return hours >= 0 && hours < 22; // 11 AM to 10 PM
+};
+const isOpen = isCafeOpen();
 
 
   const [paymentMethod, setPaymentMethod] = useState("");
