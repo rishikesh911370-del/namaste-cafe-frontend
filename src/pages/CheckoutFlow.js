@@ -6,38 +6,6 @@ const CheckoutFlow = ({ cart, setOrders, setCart }) => {
 
   const [orderEnabled, setOrderEnabled] = useState(true);
   const [placingOrder, setPlacingOrder] = useState(false);
-  const handlePlaceOrder = () => {
-  const order = {
-    id: Date.now(),
-    items: cart,
-    status: "Pending",
-  };
-
-  // ✅ SAFE CHECK
-  if (typeof setOrders === "function") {
-    setOrders(prev => [...prev, order]);
-  } else {
-    console.error("❌ setOrders is not passed from parent");
-  }
-
-  const message = `Order Details:\n${cart
-    .map(item => `${item.name} x ${item.qty}`)
-    .join("\n")}`;
-
-  window.open(
-    `https://wa.me/918002733701?text=${encodeURIComponent(message)}`,
-    "_blank"
-  );
-
-  setTimeout(() => {
-    if (typeof setCart === "function") {
-      setCart([]);
-    }
-  }, 500);
-};
-console.log("setOrders:", setOrders);
-console.log("setCart:", setCart);
-  
   const [step, setStep] = useState(null);
   const [distance, setDistance] = useState("");
   const [coords, setCoords] = useState(null);
