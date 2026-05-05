@@ -5,15 +5,14 @@ import { useEffect } from "react";
 const CheckoutFlow = ({ cart, setOrders, setCart }) => {
 
   const [orderEnabled, setOrderEnabled] = useState(true);
+  const [placingOrder, setPlacingOrder] = useState(false);
   const handlePlaceOrder = () => {
   const order = {
     id: Date.now(),
     items: cart,
     status: "Pending",
   };
-useEffect(() => {
-  setOrderEnabled(true);
-}, []);
+
   // ✅ SAFE CHECK
   if (typeof setOrders === "function") {
     setOrders(prev => [...prev, order]);
@@ -236,7 +235,9 @@ if (paymentMethod === "cod") {
 
 message += `\n*Total Payable: ₹${total}*`;
 
-    message += `\n\n*Payment: ${paymentText}*`;
+   message += paymentMethod === "upi"
+  ? "\n💳 Payment: Paid via UPI"
+  : "\n💵 Payment: Cash on Delivery";
 
     return message;
   };
@@ -246,8 +247,11 @@ const sendOrderToServer = async (paymentStatus) => {
     name: form.name,
     phone: form.phone,
     address: form.address,
-    items: cart,
-
+    items: cart.map(item => ({
+  name: item.name,
+  quantity: item.qty,
+  price: item.price
+})),
     subtotal,
     gst,
     discount: discountAmount,
@@ -275,13 +279,11 @@ const data = await res.json();
 console.log("Data:", data);
 
 const savedOrder = data;
-    if (!res.ok) throw new Error("Server error");
-
+   if (!res.ok || !data) {
+  throw new Error("Invalid server response");
+}
     // ✅ WhatsApp message WITH DISCOUNT
-    const orderId =
-  savedOrder?.id ||
-  savedOrder?._id ||
-  "NC" + Date.now();
+    const orderId = savedOrder?.id || "NC" + Date.now();
 
 const message = buildMessage(paymentMethod, orderId);
 
@@ -519,19 +521,24 @@ const handleUPIPaid = async () => {
   className="note-box"
 />
 
-
-           <button
+          <button
   className="primary-btn"
-  disabled={!isValid || !paymentMethod}
-  onClick={() => {
+  disabled={!isValid || !paymentMethod || placingOrder}
+  onClick={async () => {
+    if (placingOrder) return;
+
+    setPlacingOrder(true);
+
     if (paymentMethod === "cod") {
-      handleCOD();
+      await handleCOD();
     } else if (paymentMethod === "upi") {
       setStep("upiOptions");
     }
+
+    setPlacingOrder(false);
   }}
 >
-  Place Order
+  {placingOrder ? "Placing Order..." : "Place Order"}
 </button>
 
 
