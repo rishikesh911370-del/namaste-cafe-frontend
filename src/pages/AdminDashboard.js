@@ -71,16 +71,15 @@ const AdminDashboard = () => {
   useEffect(() => {
     const socket = io("https://namaste-cafe-backend.onrender.com");
 
-   socket.on("newOrder", newOrder => {
-  setOrders(prev => [newOrder, ...prev]);
+    socket.on("newOrder", newOrder => {
+      setOrders(prev => [newOrder, ...prev]);
 
-  // 🔊 Play sound
-  if (audioRef.current) {
-    audioRef.current.play().catch(() => {
-      console.log("Sound blocked until user interacts");
+      if (audioRef.current) {
+        audioRef.current.play().catch(() => {
+          console.log("Sound blocked until user interacts");
+        });
+      }
     });
-  }
-});
 
     socket.on("orderUpdated", updatedOrder => {
       setOrders(prev =>
@@ -164,7 +163,10 @@ Please try again in a while — we’d love to serve you soon`;
 
   return (
     <div className="dashboard">
-    <audio ref={audioRef} src="/sound.mp3" preload="auto" />
+
+      {/* 🔊 AUDIO */}
+      <audio ref={audioRef} src="/sound.mp3" preload="auto" />
+
       <h1>📦 Orders Dashboard</h1>
 
       <div className="top-bar">
@@ -187,6 +189,7 @@ Please try again in a while — we’d love to serve you soon`;
         </button>
       </div>
 
+      {/* 📦 ORDERS */}
       {orders.length === 0 ? (
         <p>No orders yet</p>
       ) : (
@@ -199,7 +202,6 @@ Please try again in a while — we’d love to serve you soon`;
             <p><strong>Phone:</strong> {order.phone}</p>
             <p><strong>Address:</strong> {order.address}</p>
 
-            {/* ITEMS */}
             <div className="items-box">
               <strong>Items:</strong>
               {order.items?.map((item, i) => {
@@ -230,55 +232,60 @@ Please try again in a while — we’d love to serve you soon`;
               </span>
             </p>
 
-           {order.deliveryToken && (
-  <>
-    <div className="delivery-section">
-      <input
-        className="delivery-input"
-        value={`https://namastecafebgp.com/deliver/${order.deliveryToken}`}
-        readOnly
-      />
+            {order.deliveryToken && (
+              <>
+                <div className="delivery-section">
+                  <input
+                    className="delivery-input"
+                    value={`https://namastecafebgp.com/deliver/${order.deliveryToken}`}
+                    readOnly
+                  />
 
-      <button
-        className="copy-btn"
-        onClick={() =>
-          navigator.clipboard.writeText(
-            `https://namastecafebgp.com/deliver/${order.deliveryToken}`
-          )
-        }
-      >
-        📋 Copy Link
-      </button>
-    </div>
+                  <button
+                    className="copy-btn"
+                    onClick={() =>
+                      navigator.clipboard.writeText(
+                        `https://namastecafebgp.com/deliver/${order.deliveryToken}`
+                      )
+                    }
+                  >
+                    📋 Copy Link
+                  </button>
+                </div>
 
-    <div className="action-buttons">
-      {order.status === "Pending" && (
-        <button className="btn-primary" onClick={() => updateStatus(order, "Accepted")}>
-          Accept
-        </button>
+                <div className="action-buttons">
+                  {order.status === "Pending" && (
+                    <button className="btn-primary" onClick={() => updateStatus(order, "Accepted")}>
+                      Accept
+                    </button>
+                  )}
+
+                  {order.status === "Accepted" && (
+                    <button className="btn-primary" onClick={() => updateStatus(order, "Ready")}>
+                      Ready
+                    </button>
+                  )}
+
+                  {order.status === "Ready" && (
+                    <button className="btn-success" onClick={() => updateStatus(order, "Delivered")}>
+                      Delivered
+                    </button>
+                  )}
+
+                  {order.status !== "Delivered" && order.status !== "Rejected" && (
+                    <button className="btn-danger" onClick={() => updateStatus(order, "Rejected")}>
+                      Reject
+                    </button>
+                  )}
+                </div>
+              </>
+            )}
+
+          </div>
+        ))
       )}
 
-      {order.status === "Accepted" && (
-        <button className="btn-primary" onClick={() => updateStatus(order, "Ready")}>
-          Ready
-        </button>
-      )}
-
-      {order.status === "Ready" && (
-        <button className="btn-success" onClick={() => updateStatus(order, "Delivered")}>
-          Delivered
-        </button>
-      )}
-
-      {order.status !== "Delivered" && order.status !== "Rejected" && (
-        <button className="btn-danger" onClick={() => updateStatus(order, "Rejected")}>
-          Reject
-        </button>
-      )}
-    </div>
-  </>
-)}
-
+      {/* 📊 MODAL (FIXED POSITION) */}
       {showStats && (
         <div className="modal-overlay">
           <div className="modal-box">
@@ -294,6 +301,7 @@ Please try again in a while — we’d love to serve you soon`;
           </div>
         </div>
       )}
+
     </div>
   );
 };
