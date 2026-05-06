@@ -164,7 +164,7 @@ Please try again in a while — we’d love to serve you soon`;
 
   return (
     <div className="dashboard">
-    <audio ref={audioRef} src="/notification.mp3" preload="auto" />
+    <audio ref={audioRef} src="/sound.mp3" preload="auto" />
       <h1>📦 Orders Dashboard</h1>
 
       <div className="top-bar">
