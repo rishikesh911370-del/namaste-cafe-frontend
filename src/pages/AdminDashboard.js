@@ -47,8 +47,9 @@ const AdminDashboard = () => {
     setOrderEnabled(data.enabled);
   };
 
-  // 📦 FETCH ORDERS
-  useEffect(() => {
+  // 📦 FETCH ORDERS (AUTO REFRESH)
+useEffect(() => {
+  const fetchOrders = () => {
     fetch("https://namaste-cafe-backend.onrender.com/orders")
       .then(res => res.json())
       .then(data => {
@@ -56,7 +57,14 @@ const AdminDashboard = () => {
           data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
         );
       });
-  }, []);
+  };
+
+  fetchOrders(); // first load
+
+  const interval = setInterval(fetchOrders, 5000); // every 2 sec
+
+  return () => clearInterval(interval); // cleanup
+}, []);
 
   // 🔊 SOCKET
   useEffect(() => {
@@ -83,9 +91,10 @@ const AdminDashboard = () => {
   };
 
   // 🔄 UPDATE STATUS
-  const updateStatus = async (index, status) => {
-    const order = orders[index];
+ const updateStatus = async (index, status) => {
+  const order = orders[index];
 
+  try {
     const res = await fetch(
       `https://namaste-cafe-backend.onrender.com/orders/${order.id}`,
       {
@@ -97,14 +106,24 @@ const AdminDashboard = () => {
 
     const updatedOrder = await res.json();
 
-    const updated = [...orders];
-    updated[index] = updatedOrder;
-    setOrders(updated);
+    setOrders(prev =>
+      prev.map(o => (o.id === updatedOrder.id ? updatedOrder : o))
+    );
 
+    // WhatsApp message
     let message = "";
 
     if (status === "Accepted") {
-      message = `Hi ${order.name}, your order is being prepared.\n\nETA: ${getDeliveryTime()}`;
+      message = ` Namaste Cafe
+
+Hi ${order.name}, your order is being prepared 
+ETA: ${getDeliveryTime()}`;
+    }
+
+    if (status === "Delivered") {
+      message = ` Your order has been delivered!
+
+Thank you for ordering from Namaste Cafe`;
     }
 
     if (message) {
@@ -112,8 +131,12 @@ const AdminDashboard = () => {
         `https://wa.me/91${order.phone}?text=${encodeURIComponent(message)}`
       );
     }
-  };
 
+  } catch (err) {
+    alert("Failed to update order");
+    console.error(err);
+  }
+};
   return (
     <div className="dashboard">
       <h1>📦 Orders Dashboard</h1>
@@ -144,28 +167,77 @@ const AdminDashboard = () => {
       ) : (
         orders.map((order, index) => {
           return (
-            <div key={order.id} className="order-card">
-              <h3>Order #{order.id}</h3>
-              <p>{order.name}</p>
-              <p>{order.phone}</p>
+  <div key={order.id} className="order-card">
 
-              <div>
-                {order.items.map((item, i) => {
-                  return (
-                    <div key={i}>
-                      {item.name} × {item.qty}
-                    </div>
-                  );
-                })}
-              </div>
+    <h3>📦 Order #{order.id}</h3>
 
-              <button onClick={() => updateStatus(index, "Accepted")}>
-                Accept
-              </button>
-            </div>
-          );
-        })
-      )}
+    <p><strong>Name:</strong> {order.name}</p>
+    <p><strong>Phone:</strong> {order.phone}</p>
+    <p><strong>Address:</strong> {order.address}</p>
+
+    {/* ITEMS */}
+    <div className="items-box">
+      <strong>Items:</strong>
+      {order.items.map((item, i) => (
+        <div key={i}>
+          • {item.name} × {item.qty} — ₹{item.price * item.qty}
+        </div>
+      ))}
+    </div>
+
+    {/* TOTAL */}
+    <p><strong>Total:</strong> ₹{order.total}</p>
+
+    {/* STATUS */}
+    <p>
+      <strong>Status:</strong>{" "}
+      <span className={`status ${order.status}`}>
+        {order.status}
+      </span>
+    </p>
+
+    {/* RIDER */}
+    <p>
+      <strong>Rider:</strong>{" "}
+      <span className={`status ${order.riderStatus}`}>
+        {order.riderStatus}
+      </span>
+    </p>
+
+    {/* DELIVERY LINK */}
+    {order.deliveryToken && (
+      <div className="delivery-link">
+        <input
+          value={`https://namastecafebgp.com/deliver/${order.deliveryToken}`}
+          readOnly
+        />
+        <button
+          onClick={() =>
+            navigator.clipboard.writeText(
+              `https://namastecafebgp.com/deliver/${order.deliveryToken}`
+            )
+          }
+        >
+          Copy
+        </button>
+      </div>
+    )}
+
+    {/* ACTION BUTTONS */}
+    <div className="actions">
+      <button onClick={() => updateStatus(index, "Accepted")}>
+        Accept
+      </button>
+
+      <button onClick={() => updateStatus(index, "Delivered")}>
+        Delivered
+      </button>
+    </div>
+
+    </div>
+    );
+  })
+)}
 
       {/* 📊 MODAL */}
       {showStats && (
