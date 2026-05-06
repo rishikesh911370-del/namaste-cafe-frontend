@@ -231,55 +231,52 @@ Please try again in a while — we’d love to serve you soon`;
             </p>
 
             {order.deliveryToken && (
-              <div className="delivery-link">
-                <input
-                  value={`https://namastecafebgp.com/deliver/${order.deliveryToken}`}
-                  readOnly
-                />
-                <button
-                  onClick={() =>
-                    navigator.clipboard.writeText(
-                      `https://namastecafebgp.com/deliver/${order.deliveryToken}`
-                    )
-                  }
-                >
-                  Copy
-                </button>
-              </div>
-            )}
+             <div className="delivery-section">
+  <input
+    className="delivery-input"
+    value={`https://namastecafebgp.com/deliver/${order.deliveryToken}`}
+    readOnly
+  />
 
-            {/* ACTION BUTTONS */}
-            <div className="action-buttons">
+  <button
+    className="copy-btn"
+    onClick={() =>
+      navigator.clipboard.writeText(
+        `https://namastecafebgp.com/deliver/${order.deliveryToken}`
+      )
+    }
+  >
+    📋 Copy Link
+  </button>
+</div>
 
-              {order.status === "Pending" && (
-                <button onClick={() => updateStatus(order, "Accepted")}>
-                  Accept
-                </button>
-              )}
+<div className="action-buttons">
 
-              {order.status === "Accepted" && (
-                <button onClick={() => updateStatus(order, "Ready")}>
-                  Ready
-                </button>
-              )}
+  {order.status === "Pending" && (
+    <button className="btn-primary" onClick={() => updateStatus(order, "Accepted")}>
+      Accept
+    </button>
+  )}
 
-              {order.status === "Ready" && (
-                <button onClick={() => updateStatus(order, "Delivered")}>
-                  Delivered
-                </button>
-              )}
+  {order.status === "Accepted" && (
+    <button className="btn-primary" onClick={() => updateStatus(order, "Ready")}>
+      Ready
+    </button>
+  )}
 
-              {order.status !== "Delivered" && order.status !== "Rejected" && (
-                <button
-                  style={{ background: "#ff4d4d", color: "white" }}
-                  onClick={() => updateStatus(order, "Rejected")}
-                >
-                  Reject
-                </button>
-              )}
+  {order.status === "Ready" && (
+    <button className="btn-success" onClick={() => updateStatus(order, "Delivered")}>
+      Delivered
+    </button>
+  )}
 
-            </div>
+  {order.status !== "Delivered" && order.status !== "Rejected" && (
+    <button className="btn-danger" onClick={() => updateStatus(order, "Rejected")}>
+      Reject
+    </button>
+  )}
 
+</div>
           </div>
         ))
       )}
