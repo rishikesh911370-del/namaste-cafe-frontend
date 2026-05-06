@@ -4132,3 +4132,59 @@ body {
 .delivery-card {
   border: 1px solid #e6ded3;
 }
+.order-card {
+  background: #1f2a3a;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  color: white;
+}
+
+.items-box {
+  background: rgba(255,255,255,0.05);
+  padding: 10px;
+  border-radius: 8px;
+  margin: 10px 0;
+}
+
+.status {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.status.Pending {
+  background: orange;
+}
+
+.status.Accepted {
+  background: #3498db;
+}
+
+.status.Delivered {
+  background: green;
+}
+
+.delivery-link {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.delivery-link input {
+  flex: 1;
+  padding: 6px;
+}
+
+.actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.actions button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
