@@ -48,31 +48,39 @@ const AdminDashboard = () => {
   };
 
   // 📦 FETCH ORDERS (AUTO REFRESH)
-useEffect(() => {
-  const fetchOrders = () => {
-    fetch("https://namaste-cafe-backend.onrender.com/orders")
-      .then(res => res.json())
-      .then(data => {
-        setOrders(
-          data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-        );
-      });
-  };
+  useEffect(() => {
+    const fetchOrders = () => {
+      fetch("https://namaste-cafe-backend.onrender.com/orders")
+        .then(res => res.json())
+        .then(data => {
+          setOrders(
+            data.sort(
+              (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+            )
+          );
+        });
+    };
 
-  fetchOrders(); // first load
+    fetchOrders();
+    const interval = setInterval(fetchOrders, 5000);
 
-  const interval = setInterval(fetchOrders, 5000); // every 2 sec
-
-  return () => clearInterval(interval); // cleanup
-}, []);
+    return () => clearInterval(interval);
+  }, []);
 
   // 🔊 SOCKET
   useEffect(() => {
     const socket = io("https://namaste-cafe-backend.onrender.com");
 
-    socket.on("newOrder", newOrder => {
-      setOrders(prev => [newOrder, ...prev]);
+   socket.on("newOrder", newOrder => {
+  setOrders(prev => [newOrder, ...prev]);
+
+  // 🔊 Play sound
+  if (audioRef.current) {
+    audioRef.current.play().catch(() => {
+      console.log("Sound blocked until user interacts");
     });
+  }
+});
 
     socket.on("orderUpdated", updatedOrder => {
       setOrders(prev =>
@@ -86,160 +94,196 @@ useEffect(() => {
   // 🕒 DELIVERY TIME
   const getDeliveryTime = () => {
     const now = new Date();
-    now.setMinutes(now.getMinutes() + 30);
-    return now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    now.setMinutes(now.getMinutes() + 35);
+    return now.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
   };
 
   // 🔄 UPDATE STATUS
- const updateStatus = async (index, status) => {
-  const order = orders[index];
-
-  try {
-    const res = await fetch(
-      `https://namaste-cafe-backend.onrender.com/orders/${order.id}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status })
-      }
-    );
-
-    const updatedOrder = await res.json();
-
-    setOrders(prev =>
-      prev.map(o => (o.id === updatedOrder.id ? updatedOrder : o))
-    );
-
-    // WhatsApp message
-    let message = "";
-
-    if (status === "Accepted") {
-      message = ` Namaste Cafe
-
-Hi ${order.name}, your order is being prepared 
-ETA: ${getDeliveryTime()}`;
-    }
-
-    if (status === "Delivered") {
-      message = ` Your order has been delivered!
-
-Thank you for ordering from Namaste Cafe`;
-    }
-
-    if (message) {
-      window.open(
-        `https://wa.me/91${order.phone}?text=${encodeURIComponent(message)}`
+  const updateStatus = async (order, status) => {
+    try {
+      const res = await fetch(
+        `https://namaste-cafe-backend.onrender.com/orders/${order.id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status })
+        }
       );
-    }
 
-  } catch (err) {
-    alert("Failed to update order");
-    console.error(err);
-  }
-};
+      const updatedOrder = await res.json();
+
+      setOrders(prev =>
+        prev.map(o => (o.id === updatedOrder.id ? updatedOrder : o))
+      );
+
+      let message = "";
+
+      if (status === "Accepted") {
+        message = `Namaste Cafe
+
+Hi ${order.name}, Your order has been received and is now being freshly prepared 
+ETA: ${getDeliveryTime()}`;
+      }
+
+      if (status === "Ready") {
+        message = `Namaste Cafe
+
+Hi ${order.name}, Good news! Your order is ready and on its way 
+We’re just a few moments away from your doorstep`;
+      }
+
+      if (status === "Delivered") {
+        message = `Namaste Cafe
+
+Hi ${order.name}, Your order has been delivered successfully
+We hope you enjoy every bite!  
+Thank you for choosing us`;
+      }
+
+      if (status === "Rejected") {
+        message = `Namaste Cafe
+
+Hi ${order.name}, We’re sorry, but we couldn’t process your order this time
+Please try again in a while — we’d love to serve you soon`;
+      }
+
+      if (message) {
+        window.open(
+          `https://wa.me/91${order.phone}?text=${encodeURIComponent(message)}`
+        );
+      }
+
+    } catch (err) {
+      alert("Failed to update order");
+      console.error(err);
+    }
+  };
+
   return (
     <div className="dashboard">
+    <audio ref={audioRef} src="/notification.mp3" preload="auto" />
       <h1>📦 Orders Dashboard</h1>
 
-<div className="top-bar">
-  <button className="btn btn-blue" onClick={() => setShowStats(true)}>
-    📊 Website Visits
-  </button>
+      <div className="top-bar">
+        <button className="btn btn-blue" onClick={() => setShowStats(true)}>
+          📊 Website Visits
+        </button>
 
-  <button className="btn btn-red" onClick={toggleOrders}>
-    {orderEnabled ? "Disable Orders ❌" : "Enable Orders ✅"}
-  </button>
+        <button className="btn btn-red" onClick={toggleOrders}>
+          {orderEnabled ? "Disable Orders ❌" : "Enable Orders ✅"}
+        </button>
 
-  <button
-    className="btn btn-gray"
-    onClick={() => {
-      localStorage.removeItem("adminAuth");
-      window.location.href = "/admin";
-    }}
-  >
-    Logout
-  </button>
-</div>
+        <button
+          className="btn btn-gray"
+          onClick={() => {
+            localStorage.removeItem("adminAuth");
+            window.location.href = "/admin";
+          }}
+        >
+          Logout
+        </button>
+      </div>
 
-      {/* 📦 ORDERS */}
       {orders.length === 0 ? (
         <p>No orders yet</p>
       ) : (
-        orders.map((order, index) => {
-          return (
-  <div key={order.id} className="order-card">
+        orders.map(order => (
+          <div key={order.id} className="order-card">
 
-    <h3>📦 Order #{order.id}</h3>
+            <h3>📦 Order #{order.id}</h3>
 
-    <p><strong>Name:</strong> {order.name}</p>
-    <p><strong>Phone:</strong> {order.phone}</p>
-    <p><strong>Address:</strong> {order.address}</p>
+            <p><strong>Name:</strong> {order.name}</p>
+            <p><strong>Phone:</strong> {order.phone}</p>
+            <p><strong>Address:</strong> {order.address}</p>
 
-    {/* ITEMS */}
-    <div className="items-box">
-      <strong>Items:</strong>
-      {order.items.map((item, i) => (
-        <div key={i}>
-          • {item.name} × {item.qty} — ₹{item.price * item.qty}
-        </div>
-      ))}
-    </div>
+            {/* ITEMS */}
+            <div className="items-box">
+              <strong>Items:</strong>
+              {order.items?.map((item, i) => {
+                const qty = item.quantity || item.qty || 1;
+                const price = item.price || 0;
 
-    {/* TOTAL */}
-    <p><strong>Total:</strong> ₹{order.total}</p>
+                return (
+                  <div key={i}>
+                    • {item.name} × {qty} — ₹{price * qty}
+                  </div>
+                );
+              })}
+            </div>
 
-    {/* STATUS */}
-    <p>
-      <strong>Status:</strong>{" "}
-      <span className={`status ${order.status}`}>
-        {order.status}
-      </span>
-    </p>
+            <p><strong>Total:</strong> ₹{order.total}</p>
 
-    {/* RIDER */}
-    <p>
-      <strong>Rider:</strong>{" "}
-      <span className={`status ${order.riderStatus}`}>
-        {order.riderStatus}
-      </span>
-    </p>
+            <p>
+              <strong>Status:</strong>{" "}
+              <span className={`status ${order.status}`}>
+                {order.status}
+              </span>
+            </p>
 
-    {/* DELIVERY LINK */}
-    {order.deliveryToken && (
-      <div className="delivery-link">
-        <input
-          value={`https://namastecafebgp.com/deliver/${order.deliveryToken}`}
-          readOnly
-        />
-        <button
-          onClick={() =>
-            navigator.clipboard.writeText(
-              `https://namastecafebgp.com/deliver/${order.deliveryToken}`
-            )
-          }
-        >
-          Copy
-        </button>
-      </div>
-    )}
+            <p>
+              <strong>Rider:</strong>{" "}
+              <span className={`status ${order.riderStatus}`}>
+                {order.riderStatus}
+              </span>
+            </p>
 
-    {/* ACTION BUTTONS */}
-    <div className="actions">
-      <button onClick={() => updateStatus(index, "Accepted")}>
-        Accept
-      </button>
+            {order.deliveryToken && (
+              <div className="delivery-link">
+                <input
+                  value={`https://namastecafebgp.com/deliver/${order.deliveryToken}`}
+                  readOnly
+                />
+                <button
+                  onClick={() =>
+                    navigator.clipboard.writeText(
+                      `https://namastecafebgp.com/deliver/${order.deliveryToken}`
+                    )
+                  }
+                >
+                  Copy
+                </button>
+              </div>
+            )}
 
-      <button onClick={() => updateStatus(index, "Delivered")}>
-        Delivered
-      </button>
-    </div>
+            {/* ACTION BUTTONS */}
+            <div className="action-buttons">
 
-    </div>
-    );
-  })
-)}
+              {order.status === "Pending" && (
+                <button onClick={() => updateStatus(order, "Accepted")}>
+                  Accept
+                </button>
+              )}
 
-      {/* 📊 MODAL */}
+              {order.status === "Accepted" && (
+                <button onClick={() => updateStatus(order, "Ready")}>
+                  Ready
+                </button>
+              )}
+
+              {order.status === "Ready" && (
+                <button onClick={() => updateStatus(order, "Delivered")}>
+                  Delivered
+                </button>
+              )}
+
+              {order.status !== "Delivered" && order.status !== "Rejected" && (
+                <button
+                  style={{ background: "#ff4d4d", color: "white" }}
+                  onClick={() => updateStatus(order, "Rejected")}
+                >
+                  Reject
+                </button>
+              )}
+
+            </div>
+
+          </div>
+        ))
+      )}
+
       {showStats && (
         <div className="modal-overlay">
           <div className="modal-box">
